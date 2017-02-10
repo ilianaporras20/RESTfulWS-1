@@ -5,6 +5,7 @@ nbbuild/
 dist/
 nbdist/
 .nb-gradle/
+nb-configuration.xml
 
 # Files to ignore mentioned on instructions
 *.class
