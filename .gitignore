@@ -1,24 +1,33 @@
-# Netbeans IDE ignore files
-nbproject/private/
-build/
-nbbuild/
-dist/
-nbdist/
-.nb-gradle/
-nb-configuration.xml
-
-# Files to ignore mentioned on instructions
+# Arhivos de Java #
 *.class
-*.swp
 
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
-
-# Package Files #
+# Archivos Java empaquetados #
 *.jar
 *.war
 *.ear
 
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+# Logs de errores de VM #
 hs_err_pid*
+
+# Eclipse IDE #
+.project
+.externalToolBuilders/
+*.launch
+.classpath
+.factorypath
+.target
+.springBeans
+.recommenders/
+
+.metadata
+bin/
+tmp/
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.settings/
+.loadpath
+.recommenders
 /target/
