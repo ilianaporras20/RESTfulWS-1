@@ -73,9 +73,6 @@ public class UserRest {
 	public Map<String, Object> getUserJSON(@PathVariable("username") String username) {
 		ServletUriComponentsBuilder builder = ServletUriComponentsBuilder.fromCurrentServletMapping();
 		
-		if (this.userService.getUser(username) == null)
-			throw new ResourceNotFoundException("User was not found");
-		
 		List<Link> links = new ArrayList<Link>();
 		links.add(new Link(builder.path("/user/").build().toString(), "user"));
 		links.add(new Link(builder.path(username).build().toString(), "self"));
@@ -93,10 +90,6 @@ public class UserRest {
 	@ResponseStatus(HttpStatus.OK)
 	public UserResource getUserXML(@PathVariable("username") String username) {
 		ServletUriComponentsBuilder builder = ServletUriComponentsBuilder.fromCurrentServletMapping();
-
-		if (this.userService.getUser(username) == null)
-			throw new ResourceNotFoundException("User was not found");
-
 		UserResource resource = new UserResource();
 		resource.addLink(new Link(builder.path("/user/").build().toString(), "user"));
 		resource.addLink(new Link(builder.path(username).build().toString(), "self"));
