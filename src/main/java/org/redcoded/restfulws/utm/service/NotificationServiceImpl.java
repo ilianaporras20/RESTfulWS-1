@@ -15,11 +15,12 @@ import org.springframework.util.StopWatch;
 
 @Service
 public class NotificationServiceImpl implements NotificationService {
+
 	@Autowired
 	private MailSender mailSender;
 	@Autowired
 	NotificationRepository notificationRepository;
-	
+
 	private static final Logger logger = LogManager.getLogger();
 
 	@Override
@@ -43,10 +44,11 @@ public class NotificationServiceImpl implements NotificationService {
 
 		try {
 			SimpleMailMessage emailMessage = new SimpleMailMessage();
-			emailMessage.setFrom("puchipupul@hotmail.com");
+			emailMessage.setFrom("redcoded@outlook.com");
 			emailMessage.setTo(String.join(",", toAddress));
-			if (ccAddress.size() > 0 && !ccAddress.get(0).isEmpty())
+			if (ccAddress.size() > 0 && !ccAddress.get(0).isEmpty()) {
 				emailMessage.setCc(String.join(",", ccAddress));
+			}
 			emailMessage.setSubject(subject);
 			emailMessage.setText(message);
 			mailSender.send(emailMessage);
