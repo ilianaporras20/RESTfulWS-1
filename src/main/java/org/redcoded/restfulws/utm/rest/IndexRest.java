@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.redcoded.restfulws.utm.model.Link;
 import org.redcoded.restfulws.utm.model.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -18,19 +20,28 @@ import java.util.Map;
 @Controller
 public class IndexRest {
 	
+	@RequestMapping(value = { "", "/" }, method = RequestMethod.OPTIONS)
+	public ResponseEntity<?> showOptions() {
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("Allow", "OPTIONS,HEAD,GET");
+		return new ResponseEntity<>(null, headers, HttpStatus.NO_CONTENT);
+	}
+
 	@RequestMapping(value = { "", "/" }, 
 			method = RequestMethod.GET, 
 			produces = { "application/json", "text/json" })
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
-	public Map<String, Object> indexJson() {
+	public Map<String, Object> indexJSON() {
 		ServletUriComponentsBuilder builder = ServletUriComponentsBuilder.fromCurrentServletMapping();
 		List<Link> links = new ArrayList<Link>();
 		links.add(new Link(builder.path("/").build().toString(), "self"));
-		links.add(new Link(builder.path("/user").build().toString(), "user"));
-		Map<String, Object> response = new Hashtable<>(2);
+		links.add(new Link(builder.path("").build().toString() + "user/", "user"));
+		links.add(new Link(builder.path("").build().toString() + "directory/", "directory"));
+		links.add(new Link(builder.path("").build().toString() + "file/", "file"));
+		links.add(new Link(builder.path("").build().toString() + "notify/", "notify"));
+		Map<String, Object> response = new Hashtable<>(1);
 		response.put("_links", links);
-		response.put("version", "1");
 		return response;
 	}
 	
@@ -39,11 +50,14 @@ public class IndexRest {
 			produces = { "application/xml", "text/xml" })
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
-	public Resource indexXml() {
+	public Resource indexXML() {
 		ServletUriComponentsBuilder builder = ServletUriComponentsBuilder.fromCurrentServletMapping();
 		Resource resource = new Resource();
 		resource.addLink(new Link(builder.path("/").build().toString(), "self"));
-		resource.addLink(new Link(builder.path("/user").build().toString(), "user"));
+		resource.addLink(new Link(builder.path("").build().toString() + "user/", "user"));
+		resource.addLink(new Link(builder.path("").build().toString() + "directory/", "directory"));
+		resource.addLink(new Link(builder.path("").build().toString() + "file/", "file"));
+		resource.addLink(new Link(builder.path("").build().toString() + "notify/", "notify"));
 		return resource;
 	}
 }
