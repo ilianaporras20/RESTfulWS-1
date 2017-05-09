@@ -43,7 +43,7 @@ public class NotificationServiceImpl implements NotificationService {
 
 		try {
 			SimpleMailMessage emailMessage = new SimpleMailMessage();
-			emailMessage.setFrom("puchipupul@hotmail.com");
+			emailMessage.setFrom("redcoded@outlook.com");
 			emailMessage.setTo(String.join(",", toAddress));
 			if (ccAddress.size() > 0 && !ccAddress.get(0).isEmpty())
 				emailMessage.setCc(String.join(",", ccAddress));
