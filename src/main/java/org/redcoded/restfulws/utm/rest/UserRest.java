@@ -7,7 +7,6 @@ import java.util.Map;
 
 import org.redcoded.restfulws.utm.form.UserForm;
 import org.redcoded.restfulws.utm.model.Link;
-import org.redcoded.restfulws.utm.model.OptionsDoc;
 import org.redcoded.restfulws.utm.model.User;
 import org.redcoded.restfulws.utm.model.UserLinkListResource;
 import org.redcoded.restfulws.utm.model.UserResource;
@@ -15,7 +14,6 @@ import org.redcoded.restfulws.utm.rest.exception.ResourceNotFoundException;
 import org.redcoded.restfulws.utm.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -31,42 +29,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 public class UserRest {
 	@Autowired
 	UserService userService;
-
-	@RequestMapping(value = "user", method = RequestMethod.OPTIONS)
-	public ResponseEntity<?> userIndex() {
-		HttpHeaders headers = new HttpHeaders();
-		headers.add("Allow", "OPTIONS,GET,POST");
-		
-		Map<HttpMethod, String> methods = new Hashtable<>(3);
-		methods.put(HttpMethod.GET, "Lists users available.");
-		methods.put(HttpMethod.OPTIONS, "Resource documentation.");
-		methods.put(HttpMethod.POST, "Creates specified user with form (username, password, fullName).");
-		
-		OptionsDoc options = new OptionsDoc();
-		options.setMethods(methods);
-		
-		return new ResponseEntity<>(options, headers, HttpStatus.OK);
-	}
-
-	@RequestMapping(value = "user/{username}", method = RequestMethod.OPTIONS)
-	public ResponseEntity<?> userOptions(@PathVariable("username") String username) {
-		if (this.userService.getUser(username) == null)
-			throw new ResourceNotFoundException("User was not found");
-
-		HttpHeaders headers = new HttpHeaders();
-		headers.add("Allow", "OPTIONS,GET,PUT,DELETE");
-		
-		Map<HttpMethod, String> methods = new Hashtable<>(4);
-		methods.put(HttpMethod.GET, "Displays specified user's information.");
-		methods.put(HttpMethod.OPTIONS, "Resource documentation.");
-		methods.put(HttpMethod.PUT, "Updates specified user's information with form (username, password, fullName).");
-		methods.put(HttpMethod.DELETE, "Deletes specified user.");
-		
-		OptionsDoc options = new OptionsDoc();
-		options.setMethods(methods);
-		
-		return new ResponseEntity<>(options, headers, HttpStatus.OK);
-	}
 
 	@RequestMapping(value = "user", 
 			method = RequestMethod.GET,
@@ -111,9 +73,6 @@ public class UserRest {
 	public Map<String, Object> getUserJSON(@PathVariable("username") String username) {
 		ServletUriComponentsBuilder builder = ServletUriComponentsBuilder.fromCurrentServletMapping();
 		
-		if (this.userService.getUser(username) == null)
-			throw new ResourceNotFoundException("User was not found");
-		
 		List<Link> links = new ArrayList<Link>();
 		links.add(new Link(builder.path("/user/").build().toString(), "user"));
 		links.add(new Link(builder.path(username).build().toString(), "self"));
@@ -131,10 +90,6 @@ public class UserRest {
 	@ResponseStatus(HttpStatus.OK)
 	public UserResource getUserXML(@PathVariable("username") String username) {
 		ServletUriComponentsBuilder builder = ServletUriComponentsBuilder.fromCurrentServletMapping();
-
-		if (this.userService.getUser(username) == null)
-			throw new ResourceNotFoundException("User was not found");
-
 		UserResource resource = new UserResource();
 		resource.addLink(new Link(builder.path("/user/").build().toString(), "user"));
 		resource.addLink(new Link(builder.path(username).build().toString(), "self"));
@@ -171,5 +126,22 @@ public class UserRest {
 		user.setPassword(form.getPassword());
 		user.setUsername(form.getUsername());
 		this.userService.updateUser(user);
+	}
+
+	@RequestMapping(value = "user", method = RequestMethod.OPTIONS)
+	public ResponseEntity<Void> userIndex() {
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("Allow", "OPTIONS,HEAD,GET,POST");
+		return new ResponseEntity<>(null, headers, HttpStatus.NO_CONTENT);
+	}
+
+	@RequestMapping(value = "user/{username}", method = RequestMethod.OPTIONS)
+	public ResponseEntity<Void> userOptions(@PathVariable("username") String username) {
+		if (this.userService.getUser(username) == null)
+			throw new ResourceNotFoundException("User was not found");
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("Allow", "OPTIONS,HEAD,GET,PUT,DELETE");
+		return new ResponseEntity<>(null, headers, HttpStatus.NO_CONTENT);
 	}
 }

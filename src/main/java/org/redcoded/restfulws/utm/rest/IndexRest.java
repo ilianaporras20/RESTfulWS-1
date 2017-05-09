@@ -7,10 +7,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.redcoded.restfulws.utm.model.Link;
-import org.redcoded.restfulws.utm.model.OptionsDoc;
 import org.redcoded.restfulws.utm.model.Resource;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -22,21 +20,6 @@ import java.util.Map;
 @Controller
 public class IndexRest {
 	
-	@RequestMapping(value = { "", "/" }, method = RequestMethod.OPTIONS)
-	public ResponseEntity<?> showOptions() {
-		HttpHeaders headers = new HttpHeaders();
-		headers.add("Allow", "OPTIONS,GET");
-		
-		Map<HttpMethod, String> methods = new Hashtable<>(2);
-		methods.put(HttpMethod.GET, "Lists resources available.");
-		methods.put(HttpMethod.OPTIONS, "Resource documentation.");
-		
-		OptionsDoc options = new OptionsDoc();
-		options.setMethods(methods);
-		
-		return new ResponseEntity<>(options, headers, HttpStatus.OK);
-	}
-
 	@RequestMapping(value = { "", "/" }, 
 			method = RequestMethod.GET, 
 			produces = { "application/json", "text/json" })
@@ -69,5 +52,12 @@ public class IndexRest {
 		resource.addLink(new Link(builder.path("").build().toString() + "file/", "file"));
 		resource.addLink(new Link(builder.path("").build().toString() + "notify/", "notify"));
 		return resource;
+	}
+	
+	@RequestMapping(value = { "", "/" }, method = RequestMethod.OPTIONS)
+	public ResponseEntity<?> showOptions() {
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("Allow", "OPTIONS,HEAD,GET");
+		return new ResponseEntity<>(null, headers, HttpStatus.NO_CONTENT);
 	}
 }

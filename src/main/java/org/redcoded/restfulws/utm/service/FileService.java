@@ -9,5 +9,4 @@ public interface FileService {
 	public Path getFile(String fileName);
 	public List<Path> walkDir(Path path, List<Path> paths);
 	public boolean uploadFile(MultipartFile file, String name, String path);
-	public String delete(String path);
 }
