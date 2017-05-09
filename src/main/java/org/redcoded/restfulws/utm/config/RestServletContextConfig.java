@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
@@ -16,7 +15,6 @@ import org.springframework.oxm.Marshaller;
 import org.springframework.oxm.Unmarshaller;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
@@ -67,13 +65,5 @@ public class RestServletContextConfig extends WebMvcConfigurerAdapter {
 		xmlConverter.setMarshaller(this.marshaller);
 		xmlConverter.setUnmarshaller(this.unmarshaller);
 		return xmlConverter;
-	}
-	
-	@Bean
-	public CommonsMultipartResolver multipartResolver(){
-	    CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
-	    multipartResolver.setDefaultEncoding("UTF-8");
-	    multipartResolver.setMaxUploadSize(-1);
-	    return multipartResolver;
 	}
 }

@@ -17,7 +17,8 @@ import org.springframework.http.converter.xml.SourceHttpMessageConverter;
 import org.springframework.oxm.Marshaller;
 import org.springframework.oxm.Unmarshaller;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.multipart.commons.CommonsMultipartResolver;
+import org.springframework.web.multipart.MultipartResolver;
+import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 import org.springframework.web.servlet.RequestToViewNameTranslator;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
@@ -65,13 +66,10 @@ public class ServletContextConfig extends WebMvcConfigurerAdapter {
 	}
 
 	@Bean
-	public CommonsMultipartResolver multipartResolver(){
-	    CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
-	    multipartResolver.setDefaultEncoding("UTF-8");
-	    multipartResolver.setMaxUploadSize(-1);
-	    return multipartResolver;
+	public MultipartResolver multipartResolver() {
+		return new StandardServletMultipartResolver();
 	}
-	
+
 	@Override
 	public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
 		converters.add(createXMLMessageConverter());
